@@ -13,108 +13,140 @@
     information: "Portions copyright [year] [name of copyright owner]".
 
     Copyright (c) 2011-2015 ForgeRock AS. All rights reserved.
-    Portions Copyright 2022 Wren Security.
+    Portions Copyright 2022-2025 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.forgerock.openicf.connectors</groupId>
-        <artifactId>connectors-parent</artifactId>
-        <version>1.5.3.0-SNAPSHOT</version>
+        <groupId>org.wrensecurity.wrenicf.connector</groupId>
+        <artifactId>connector-bundle-parent</artifactId>
+        <version>1.5.3.0</version>
     </parent>
 
     <artifactId>ldap-connector</artifactId>
-    <version>1.4.3.0</version>
+    <version>1.5.3.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>Generic JNDI based LDAP Connector</name>
     <description>Connector for Sun DSEE and OpenDJ and Generic LDAP</description>
 
-    <url>https://github.com/WrenSecurity/openicf-ldap-connector</url>
+    <url>https://github.com/WrenSecurity/wrenicf-ldap-connector</url>
+
     <scm>
-        <url>https://github.com/WrenSecurity/openicf-ldap-connector</url>
-        <connection>scm:git:git://github.com/WrenSecurity/openicf-ldap-connector.git</connection>
-        <developerConnection>scm:git:git@github.com:WrenSecurity/openicf-ldap-connector.git</developerConnection>
-        <tag>1.4.3.0</tag>
+        <url>https://github.com/WrenSecurity/wrenicf-ldap-connector</url>
+        <connection>scm:git:git://github.com/WrenSecurity/wrenicf-ldap-connector.git</connection>
+        <developerConnection>scm:git:git@github.com:WrenSecurity/wrenicf-ldap-connector.git</developerConnection>
+        <tag>HEAD</tag>
     </scm>
 
-    <issueManagement>
-        <system>GitHub Issues</system>
-        <url>https://github.com/WrenSecurity/openicf-ldap-connector/issues</url>
-    </issueManagement>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>wrensecurity-snapshots</id>
+            <name>Wren Security Snapshot Repository</name>
+            <url>https://wrensecurity.jfrog.io/wrensecurity/snapshots</url>
+        </snapshotRepository>
 
+        <repository>
+            <id>wrensecurity-releases</id>
+            <name>Wren Security Release Repository</name>
+            <url>https://wrensecurity.jfrog.io/wrensecurity/releases</url>
+        </repository>
+    </distributionManagement>
+
+    <!-- (see FAQ at http://maven.apache.org/guides/mini/guide-central-repository-upload.html ) -->
     <repositories>
         <repository>
             <id>wrensecurity-releases</id>
             <name>Wren Security Release Repository</name>
             <url>https://wrensecurity.jfrog.io/wrensecurity/releases</url>
+
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+
             <releases>
                 <enabled>true</enabled>
             </releases>
         </repository>
+
         <repository>
             <id>wrensecurity-snapshots</id>
             <name>Wren Security Snapshot Repository</name>
             <url>https://wrensecurity.jfrog.io/wrensecurity/snapshots</url>
+
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
+
             <releases>
                 <enabled>false</enabled>
             </releases>
         </repository>
+
     </repositories>
 
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/WrenSecurity/wrenicf-ldap-connector/issues</url>
+    </issueManagement>
+
     <properties>
+        <pgpVerifyPluginVersion>1.19.0</pgpVerifyPluginVersion>
+        <pgpVerifyKeysVersion>1.8.3</pgpVerifyKeysVersion>
+
         <connectorPackage>org.identityconnectors.ldap</connectorPackage>
         <connectorClass>LdapConnector</connectorClass>
-        <framework.compatibilityVersion>1.4</framework.compatibilityVersion>
-        <framework.releaseVersion>1.0</framework.releaseVersion>
+        <framework.compatibilityVersion>1.5</framework.compatibilityVersion>
+        <framework.releaseVersion>3.0</framework.releaseVersion>
         <!-- Specify default port to allow executing of test cases in IDE -->
         <opendj.port>44444</opendj.port>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.openicf.framework</groupId>
-            <artifactId>connector-framework</artifactId>
+            <groupId>org.wrensecurity.wrenicf.framework</groupId>
+            <artifactId>connector-framework-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.forgerock.opendj</groupId>
             <artifactId>opendj-ldap-sdk</artifactId>
             <version>2.6.10</version>
             <type>jar</type>
         </dependency>
+
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
+            <version>7.8.0</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openicf.framework</groupId>
+            <groupId>org.wrensecurity.wrenicf.framework</groupId>
             <artifactId>connector-framework-internal</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.openicf.framework</groupId>
-            <artifactId>connector-test-common</artifactId>
+            <groupId>org.wrensecurity.wrenicf.framework</groupId>
+            <artifactId>connector-framework-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
+            <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-server-legacy</artifactId>
-            <version>3.5.1</version>
+            <version>5.0.1</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.0</version>
+            <artifactId>mockito-core </artifactId>
+            <version>5.16.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -125,6 +157,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -132,6 +165,7 @@
                     <systemPropertyVariables>
                         <opendj.port>${opendj.port}</opendj.port>
                     </systemPropertyVariables>
+
                     <excludes>
                         <!-- Temporarily exclude broken tests -->
                         <exclude>SunDSChangeLogSyncStrategyTests.java</exclude>
@@ -142,17 +176,21 @@
                     </excludes>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.7</version>
+                <version>3.6.0</version>
+
                 <executions>
                     <execution>
                         <id>reserve-network-port</id>
+
                         <goals>
                             <goal>reserve-network-port</goal>
                         </goals>
                         <phase>process-resources</phase>
+
                         <configuration>
                             <portNames>
                                 <portName>opendj.port</portName>
@@ -161,14 +199,18 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
             </plugin>
+
             <plugin>
                 <groupId>org.forgerock.maven.plugins</groupId>
                 <artifactId>openicf-maven-plugin</artifactId>
+                <version>1.5.0</version>
+
                 <executions>
                     <execution>
                         <goals>
