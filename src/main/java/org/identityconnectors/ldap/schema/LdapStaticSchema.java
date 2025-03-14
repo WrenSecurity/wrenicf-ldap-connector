@@ -112,7 +112,7 @@ public class LdapStaticSchema implements LdapNativeSchema {
     }
 
     public Set<String> getStructuralObjectClasses() {
-        // we skip groupOfUniqueNames and inetOrgPerson since they are 
+        // we skip groupOfUniqueNames and inetOrgPerson since they are
         // the default object classes used for __ACCOUNT__ and __GROUP__
         return newSet(ACCOUNT,
                 PERSON,

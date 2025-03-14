@@ -1,22 +1,22 @@
 /*
  * ====================
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
- * Copyright 2008-2009 Sun Microsystems, Inc. All rights reserved.     
- * 
- * The contents of this file are subject to the terms of the Common Development 
- * and Distribution License("CDDL") (the "License").  You may not use this file 
+ *
+ * Copyright 2008-2009 Sun Microsystems, Inc. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of the Common Development
+ * and Distribution License("CDDL") (the "License").  You may not use this file
  * except in compliance with the License.
- * 
- * You can obtain a copy of the License at 
+ *
+ * You can obtain a copy of the License at
  * http://IdentityConnectors.dev.java.net/legal/license.txt
- * See the License for the specific language governing permissions and limitations 
- * under the License. 
- * 
+ * See the License for the specific language governing permissions and limitations
+ * under the License.
+ *
  * When distributing the Covered Code, include this CDDL Header Notice in each file
  * and include the License file at identityconnectors/legal/license.txt.
- * If applicable, add the following below this CDDL Header, with the fields 
- * enclosed by brackets [] replaced by your own identifying information: 
+ * If applicable, add the following below this CDDL Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * ====================
  * "Portions Copyrighted 2014 ForgeRock AS"
@@ -214,7 +214,7 @@ public class SunDSChangeLogSyncStrategy implements LdapSyncStrategy {
                 log.ok("Skipping entry because modifiersName is in the list of modifiersName's to filter out");
                 return null;
             }
-            String uidAttr = conn.getSchemaMapping().getLdapUidAttribute(oclass);            
+            String uidAttr = conn.getSchemaMapping().getLdapUidAttribute(oclass);
             if (!LdapEntry.isDNAttribute(uidAttr)) {
                 String guid = null;
                 if ("entryUUID".equalsIgnoreCase(uidAttr)) {
@@ -234,7 +234,7 @@ public class SunDSChangeLogSyncStrategy implements LdapSyncStrategy {
                         guid = rdn[1];
                     }
                 }
-                
+
                 if (null != guid) {
                     syncDeltaBuilder.setUid(new Uid(guid));
                 } else {
@@ -259,7 +259,7 @@ public class SunDSChangeLogSyncStrategy implements LdapSyncStrategy {
             log.ok("Skipping entry because no changed attributes in the list of attributes to synchronize");
             return null;
         }
-        
+
         // If the change type was modrdn, we need to compute the DN that the entry
         // was modified to.
         String newTargetDN = targetDN;
@@ -306,7 +306,7 @@ public class SunDSChangeLogSyncStrategy implements LdapSyncStrategy {
         if (conn.getConfiguration().isSynchronizePasswords()) {
             List<Object> passwordValues = attrChanges.get(conn.getConfiguration().getPasswordAttributeToSynchronize());
             if (!passwordValues.isEmpty()) {
-                byte[] encryptedPwd = (byte[]) passwordValues.get(0); 
+                byte[] encryptedPwd = (byte[]) passwordValues.get(0);
                 String decryptedPwd = getPasswordDecryptor().decryptPassword(encryptedPwd);
                 passwordAttr = AttributeBuilder.buildPassword(new GuardedString(decryptedPwd.toCharArray()));
             }
@@ -657,7 +657,7 @@ public class SunDSChangeLogSyncStrategy implements LdapSyncStrategy {
         }
         return oclassesToSync;
     }
-    
+
     private PasswordDecryptor getPasswordDecryptor() {
         if (passwordDecryptor == null) {
             conn.getConfiguration().getPasswordDecryptionKey().access(new Accessor() {

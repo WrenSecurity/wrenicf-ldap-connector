@@ -45,8 +45,8 @@ import org.identityconnectors.framework.common.objects.Attribute;
 import org.identityconnectors.framework.common.objects.OperationalAttributeInfos;
 import org.identityconnectors.ldap.search.LdapInternalSearch;
 
-/* 
- * This class provides static helper methods to handle 
+/*
+ * This class provides static helper methods to handle
  * the MS AD userAccountControl computed attribute.
  */
 public class ADUserAccountControl {
@@ -72,15 +72,15 @@ public class ADUserAccountControl {
     public static final String ACCOUNT_NEVER_EXPIRES = "9223372036854775807";
 
     /*
-     * The date and time (UTC) that this account was locked out. 
-     * Represents the number of 100-nanosecond intervals since January 1, 1601 (UTC). 
+     * The date and time (UTC) that this account was locked out.
+     * Represents the number of 100-nanosecond intervals since January 1, 1601 (UTC).
      * A value of zero means that the account is not currently locked out.
      */
     public static final String LOCKOUT_TIME = "lockoutTime";
 
     /*
-     * The last time the user logged on. 
-     * Represents the number of 100-nanosecond intervals since January 1, 1601 (UTC). 
+     * The last time the user logged on.
+     * Represents the number of 100-nanosecond intervals since January 1, 1601 (UTC).
      * A value of zero means that the last logon time is unknown.
      */
     public static final String LAST_LOGON = "lastLogon";
@@ -100,17 +100,17 @@ public class ADUserAccountControl {
      */
     public static final String MS_USR_ACCT_CTRL_ATTR = "userAccountControl";
 
-    /* 
+    /*
      * userAccountControl value for a normal enabled account
      */
     public static final String NORMAL_ENABLED = "512";
-    /* 
+    /*
      * userAccountControl value for a normal enabled account
      */
     public static final String NORMAL_DISABLED = "514";
 
     /*
-     * Computed system attributes used to check if account is locked out 
+     * Computed system attributes used to check if account is locked out
      * or if password is expired. This is not provided by userAccountControl
      */
     public static final String MSDS_USR_ACCT_CTRL_ATTR = "msDS-User-Account-Control-Computed";
