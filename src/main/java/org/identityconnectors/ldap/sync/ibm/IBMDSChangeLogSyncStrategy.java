@@ -40,7 +40,7 @@ import org.identityconnectors.ldap.sync.sunds.SunDSChangeLogSyncStrategy;
 
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class IBMDSChangeLogSyncStrategy extends SunDSChangeLogSyncStrategy {

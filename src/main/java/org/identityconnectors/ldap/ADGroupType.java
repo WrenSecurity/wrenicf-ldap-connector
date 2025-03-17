@@ -38,36 +38,36 @@ import javax.naming.directory.SearchResult;
 import org.identityconnectors.framework.common.objects.Attribute;
 import org.identityconnectors.ldap.search.LdapInternalSearch;
 
-/* 
- * This class provides static helper methods to handle 
+/*
+ * This class provides static helper methods to handle
  * the MS AD grouType attribute.
  */
 public class ADGroupType {
-    
+
     // A group defaults to Global security
     private int gt = SCOPE_GLOBAL | TYPE_SECURITY;
-    
+
     /**
      * Specifies a group with global scope.
      */
     public static final int SCOPE_GLOBAL = 0x00000002;
-    
+
     /**
      * Specifies a group with domain local scope.
      */
     public static final int SCOPE_DOMAIN_LOCAL = 0x00000004;
-    
+
     /**
      * Specifies a group with universal scope.
      */
     public static final int SCOPE_UNIVERSAL = 0x00000008;
-    
+
     /**
-     * Specifies a security group. 
+     * Specifies a security group.
      * If this flag is not set, then the group is a distribution group.
      */
     public static final int TYPE_SECURITY = 0x80000000;
-    
+
     /*
      * The Group Scope special attribute
      */
@@ -76,25 +76,25 @@ public class ADGroupType {
      * The Group Type special attribute
      */
     public static final String GROUP_TYPE_NAME = createSpecialName("GROUP_TYPE");
-    
+
     /**
-     * The groupType attribute 
+     * The groupType attribute
      */
     public static final String GROUPTYPE = "groupType";
-    
+
     public static final String GLOBAL = "global";
     public static final String DOMAIN_LOCAL = "domain";
     public static final String UNIVERSAL = "universal";
-    
+
     public static final String SECURITY = "security";
     public static final String DISTRIBUTION = "distribution";
-    
+
     public ADGroupType() {}
-    
+
     public ADGroupType(int gt) {
         this.gt = gt;
     }
-    
+
     public void setScope(Attribute scope){
         if (scope != null) {
             if (!scope.getValue().isEmpty()) {
@@ -102,7 +102,7 @@ public class ADGroupType {
             }
         }
     }
-    
+
     public void setScope(String scope){
         if (DOMAIN_LOCAL.equalsIgnoreCase(scope)){
             gt &= ~SCOPE_UNIVERSAL;
@@ -119,7 +119,7 @@ public class ADGroupType {
             gt = gt | SCOPE_GLOBAL;
         }
     }
-    
+
     public void setType(Attribute type){
         if (type != null) {
             if (!type.getValue().isEmpty()) {
@@ -127,7 +127,7 @@ public class ADGroupType {
             }
         }
     }
-    
+
     public void setType(String type){
         if (DISTRIBUTION.equalsIgnoreCase(type)){
             gt = gt & ~TYPE_SECURITY;
@@ -136,29 +136,29 @@ public class ADGroupType {
             gt = gt | TYPE_SECURITY;
         }
     }
-    
+
     public javax.naming.directory.Attribute getLdapAttribute() {
         return new BasicAttribute(GROUPTYPE,Integer.toString(gt));
     }
-    
+
     // Static helpers
-    
+
     public static boolean isScopeGlobal(String scope) {
         return ((Integer.parseInt(scope) & SCOPE_GLOBAL) == SCOPE_GLOBAL);
     }
-    
+
     public static boolean isScopeDomainLocal(String scope) {
         return ((Integer.parseInt(scope) & SCOPE_DOMAIN_LOCAL) == SCOPE_DOMAIN_LOCAL);
     }
-    
+
     public static boolean isScopeUniversal(String scope) {
         return ((Integer.parseInt(scope) & SCOPE_UNIVERSAL) == SCOPE_UNIVERSAL);
     }
-    
+
     public static boolean isTypeSecurity(String type) {
         return ((Integer.parseInt(type) & TYPE_SECURITY) == TYPE_SECURITY);
     }
-    
+
     public static String getType(String type){
         if (isTypeSecurity(type)){
             return SECURITY;
@@ -166,7 +166,7 @@ public class ADGroupType {
             return DISTRIBUTION;
         }
     }
-    
+
     public static String getScope(String scope){
         if (isScopeGlobal(scope)){
             return GLOBAL;
@@ -176,7 +176,7 @@ public class ADGroupType {
             return UNIVERSAL;
         }
     }
-    
+
     public static ADGroupType createADGroupType(LdapConnection conn, String id) throws NamingException {
         if (LdapConstants.MS_GUID_ATTR.equalsIgnoreCase(conn.getConfiguration().getUidAttribute())) {
             SearchControls controls = LdapInternalSearch.createDefaultSearchControls();
@@ -198,5 +198,5 @@ public class ADGroupType {
         }
         throw new NamingException("Entry not found");
     }
-    
+
 }

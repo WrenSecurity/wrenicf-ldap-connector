@@ -17,16 +17,16 @@ import org.identityconnectors.common.Assertions;
 import org.identityconnectors.framework.common.exceptions.ConnectorException;
 
 public class PasswordDecryptor {
-    
+
     private static final String ENCRYPTION_ALGORITHM = "DESede/CBC/NoPadding";
 
     // This version magic is used to prefix the password before encryption.
     // The magic here must match the magic used in wpsync/connector/native/plugin/Util.cpp
     private static final int KEY_VERSION_MAGIC = 0x132d1403;
-    
+
     // Decrypted password format: (4 bytes) magic, (4 bytes) length, password, (4 bytes) magic, padding.
     private static final int LENGTH_INDEX = 4;
-    
+
     private final Cipher cipher;
     private final int blockSize;
 
@@ -37,7 +37,7 @@ public class PasswordDecryptor {
         IvParameterSpec ivspec = new IvParameterSpec(iv);
         // triple-DES key is used
         SecretKeySpec keyspec = new SecretKeySpec(desedeKey, "DESede");
-        
+
         try {
             // The cipher algorithm is triple-DES (DESede).
             // Mode: cipher blocking chaining.
@@ -58,7 +58,7 @@ public class PasswordDecryptor {
 
     /**
      * Decrypts the password value using the configured symmetric key.
-     * 
+     *
      * @param encryptedPassword the encrypted password to decrypt.
      * @return The clear-text password.
      * @throws ConnectorException if the password value could not be decrypted.
@@ -66,7 +66,7 @@ public class PasswordDecryptor {
     public String decryptPassword(byte[] encryptedPassword) {
         byte decryptInput[];
         byte decryptedBytes[];
-        
+
         // Pad input if necessary.
         if (encryptedPassword.length % blockSize != 0) {
             decryptInput = new byte[((encryptedPassword.length / blockSize) + 1) * blockSize];
@@ -137,7 +137,7 @@ public class PasswordDecryptor {
     private int getIntValueFromByteArray(byte[] bytes, int index) {
         return (getUnsignedByteValueAsInt(bytes[index]) << 24)
                 + (getUnsignedByteValueAsInt(bytes[index + 1]) << 16)
-                + (getUnsignedByteValueAsInt(bytes[index + 2]) << 8) 
+                + (getUnsignedByteValueAsInt(bytes[index + 2]) << 8)
                 + getUnsignedByteValueAsInt(bytes[index + 3]);
     }
 

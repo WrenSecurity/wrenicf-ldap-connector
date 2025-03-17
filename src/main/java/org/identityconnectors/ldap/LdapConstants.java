@@ -1,22 +1,22 @@
 /*
  * ====================
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
- * Copyright 2007-2008 Sun Microsystems, Inc. All rights reserved.     
- * 
- * The contents of this file are subject to the terms of the Common Development 
- * and Distribution License("CDDL") (the "License").  You may not use this file 
+ *
+ * Copyright 2007-2008 Sun Microsystems, Inc. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of the Common Development
+ * and Distribution License("CDDL") (the "License").  You may not use this file
  * except in compliance with the License.
- * 
- * You can obtain a copy of the License at 
+ *
+ * You can obtain a copy of the License at
  * http://IdentityConnectors.dev.java.net/legal/license.txt
- * See the License for the specific language governing permissions and limitations 
- * under the License. 
- * 
+ * See the License for the specific language governing permissions and limitations
+ * under the License.
+ *
  * When distributing the Covered Code, include this CDDL Header Notice in each file
  * and include the License file at identityconnectors/legal/license.txt.
- * If applicable, add the following below this CDDL Header, with the fields 
- * enclosed by brackets [] replaced by your own identifying information: 
+ * If applicable, add the following below this CDDL Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * ====================
  *
@@ -44,31 +44,31 @@ public class LdapConstants {
     public static final String SEARCH_FILTER_NAME = "searchFilter";
 
     public static final String OP_SEARCH_FILTER = "searchFilter";
-    
+
     public static final String MS_GUID_ATTR = "objectGUID";
-    
+
     public static final String MS_SID_ATTR = "objectSID";
 
     public static final String MS_TOKEN_GROUPS_ATTR = "tokenGroups";
-    
+
     public static final String MS_DS_USER_ACCOUNT_DISABLED = "msDS-UserAccountDisabled";
-    
+
     public static final String MS_DS_USER_PASSWORD_EXPIRED = "msDS-UserPasswordExpired";
-    
+
     public static final String MS_DS_USER_ACCOUNT_AUTOLOCKED = "ms-DS-UserAccountAutoLocked";
-    
+
     public static final String OBJECTCLASS_ATTR = "objectClass";
-    
+
     public static enum ServerType {
-        SUN_DSEE, 
-        OPENDS, 
-        OPENDJ, 
-        IBM, 
-        MSAD, 
-        MSAD_LDS, 
-        MSAD_GC, 
-        NOVELL, 
-        UNBOUNDID, 
+        SUN_DSEE,
+        OPENDS,
+        OPENDJ,
+        IBM,
+        MSAD,
+        MSAD_LDS,
+        MSAD_GC,
+        NOVELL,
+        UNBOUNDID,
         OPENLDAP,
         RHDS,
         CALDAP,

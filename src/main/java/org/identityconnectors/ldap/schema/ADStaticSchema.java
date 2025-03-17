@@ -40,7 +40,7 @@ import org.identityconnectors.ldap.LdapNativeSchema;
 import org.identityconnectors.ldap.LdapAttributeType;
 import org.identityconnectors.ldap.ADGroupType;
 
-/* 
+/*
  * This class provides basic static schema for Active Directory User/Group/Ou
  */
 public class ADStaticSchema implements LdapNativeSchema {
@@ -212,7 +212,7 @@ public class ADStaticSchema implements LdapNativeSchema {
         flagsNotCRDef.add(Flags.NOT_READABLE);
         flagsNotCRDef.add(Flags.NOT_RETURNED_BY_DEFAULT);
         attrName2Type.put(OperationalAttributes.CURRENT_PASSWORD_NAME, new LdapAttributeType(GuardedString.class, flagsNotCRDef));
-        
+
         // Special case for account_expire - no read, not return by default - just create/update
         Set<Flags> flagsNotRDef = EnumSet.noneOf(Flags.class);
         flagsNotRDef.add(Flags.NOT_READABLE);

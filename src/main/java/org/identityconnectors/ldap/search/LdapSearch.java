@@ -21,7 +21,7 @@
  * ====================
  *
  * "Portions Copyrighted 2013-2016 Forgerock AS"
- * Portions Copyright 2022 Wren Security.
+ * Portions Copyright 2022-2025 Wren Security.
  */
 package org.identityconnectors.ldap.search;
 
@@ -133,7 +133,6 @@ public class LdapSearch {
      * the given handler.
      *
      * @param handler the handler.
-     * @throws NamingException if a JNDI exception occurs.
      */
     public final void execute(final ResultsHandler handler) {
         final String[] attrsToGetOption = options.getAttributesToGet();
