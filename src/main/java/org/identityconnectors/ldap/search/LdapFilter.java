@@ -19,6 +19,8 @@
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * ====================
+ *
+ * Portions Copyright 2025 Wren Security.
  */
 package org.identityconnectors.ldap.search;
 
@@ -79,7 +81,7 @@ public final class LdapFilter {
      *
      * <p>If any of the two filters contain base DN, it is used together with
      * it's scope and a native filter whose value is the native filters of the
-     * two filters "ANDed" together using the LDAP <code>&</code> operator.</p>
+     * two filters "ANDed" together using the LDAP <code>&amp;</code> operator.</p>
      *
      * <p>If both filters have base DN, the method returns <code>null</code>.
      *
