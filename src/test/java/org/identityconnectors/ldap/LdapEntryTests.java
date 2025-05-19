@@ -23,9 +23,12 @@
 package org.identityconnectors.ldap;
 
 import static org.testng.AssertJUnit.assertEquals;
+
 import org.testng.annotations.Test;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
+import javax.naming.directory.SearchResult;
+import javax.naming.ldap.LdapName;
 
 public class LdapEntryTests {
 
@@ -45,4 +48,26 @@ public class LdapEntryTests {
         assertEquals(ENTRY_DN, entry.getAttributes().get("dn").get());
         assertEquals(ENTRY_DN, entry.getAttributes().get("entryDN").get());
     }
+
+    @Test
+    public void testSearchResultDn() throws Exception {
+        // Test encoded LDAP URL
+        SearchResult result = new SearchResult("ldap://example.com:389/cn=foo%5c,%20bar,ou=wren%20security,ou=org", null, null);
+        result.setRelative(false);
+        LdapEntry entry = LdapEntry.create(null, result);
+        assertEquals(new LdapName("cn=foo\\, bar,ou=wren security,ou=org"), entry.getDN());
+
+        // Test plain LDAP URL
+        result = new SearchResult("ldap://example.com:389/cn=foobar,ou=wrensecurity,ou=org", null, null);
+        result.setRelative(false);
+        entry = LdapEntry.create(null, result);
+        assertEquals(new LdapName("cn=foobar,ou=wrensecurity,ou=org"), entry.getDN());
+
+        // Test relative DN
+        result = new SearchResult("cn=foobar", null, null);
+        result.setNameInNamespace("cn=foobar,ou=wrensecurity,ou=org");
+        entry = LdapEntry.create(null, result);
+        assertEquals(new LdapName("cn=foobar,ou=wrensecurity,ou=org"), entry.getDN());
+    }
+
 }
