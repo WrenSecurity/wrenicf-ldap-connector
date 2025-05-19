@@ -19,6 +19,8 @@
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * ====================
+ *
+ * Portions Copyright 2025 Wren Security.
  */
 package org.identityconnectors.ldap;
 
@@ -37,6 +39,7 @@ import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.SearchResult;
 import javax.naming.ldap.LdapName;
 
+import org.forgerock.opendj.ldap.LDAPUrl;
 import org.identityconnectors.framework.common.exceptions.ConnectorException;
 
 public abstract class LdapEntry {
@@ -125,31 +128,14 @@ public abstract class LdapEntry {
         public LdapName getDN() {
             if (dn == null) {
                 if (result.isRelative()) {
-                    try {
-                        //dn = join(result.getName(), baseDN);
-                        dn = new LdapName(result.getNameInNamespace());
-                    } catch (InvalidNameException ex) {
-                         throw new ConnectorException(ex);
-                    }
+                    dn = quietCreateLdapName(result.getNameInNamespace());
                 } else {
-                    // Striping the scheme and host, according to a comment in the adapter.
-                    dn = join(getDNFromLdapUrl(result.getName()), null);
+                    dn = quietCreateLdapName(LDAPUrl.valueOf(result.getName()).getName().toString());
                 }
             }
             return dn;
         }
 
-        private String getDNFromLdapUrl(String url) {
-            int schemeEndPos = url.indexOf("://");
-            if (schemeEndPos < 0) {
-                return null;
-            }
-            int slashAfterHostPos = url.indexOf('/', schemeEndPos + 3);
-            if (slashAfterHostPos < 0) {
-                return null;
-            }
-            return url.substring(slashAfterHostPos + 1);
-        }
     }
 
     private static final class Simple extends LdapEntry {
