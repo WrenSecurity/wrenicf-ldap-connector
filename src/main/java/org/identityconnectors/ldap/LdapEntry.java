@@ -54,8 +54,8 @@ public abstract class LdapEntry {
         ENTRY_DN_ATTRS = unmodifiableSet(set);
     }
 
-    public static LdapEntry create(String baseDN, SearchResult result) {
-        return new SearchResultBased(baseDN, result);
+    public static LdapEntry create(SearchResult result) {
+        return new SearchResultBased(result);
     }
 
     public static LdapEntry create(String entryDN, Attributes attributes) {
@@ -102,16 +102,14 @@ public abstract class LdapEntry {
 
     private static final class SearchResultBased extends LdapEntry {
 
-        private final String baseDN;
         private final SearchResult result;
 
         private Attributes attributes;
         private LdapName dn;
 
-        public SearchResultBased(String baseDN, SearchResult result) {
+        public SearchResultBased(SearchResult result) {
             assert result != null;
 
-            this.baseDN = baseDN;
             this.result = result;
         }
 

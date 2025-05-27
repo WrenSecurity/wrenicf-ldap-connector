@@ -139,6 +139,7 @@ public class LdapSearch {
         final Set<String> attrsToGet = getAttributesToGet(attrsToGetOption);
         LdapInternalSearch search = getInternalSearch(attrsToGet);
         search.execute(new LdapSearchResultsHandler() {
+            @Override
             public boolean handle(String baseDN, SearchResult result) throws NamingException {
                 return handler.handle(createConnectorObject(baseDN, result, attrsToGet, attrsToGetOption != null));
             }
@@ -155,6 +156,7 @@ public class LdapSearch {
         final ConnectorObject[] results = new ConnectorObject[]{null};
         LdapInternalSearch search = getInternalSearch(attrsToGet);
         search.execute(new LdapSearchResultsHandler() {
+            @Override
             public boolean handle(String baseDN, SearchResult result) throws NamingException {
                 results[0] = createConnectorObject(baseDN, result, attrsToGet, attrsToGetOption != null);
                 return false;
@@ -232,7 +234,7 @@ public class LdapSearch {
      * is used to compute the connector object's name attribute.
      */
     private ConnectorObject createConnectorObject(String baseDN, SearchResult result, Set<String> attrsToGet, boolean emptyAttrWhenNotFound) {
-        LdapEntry entry = LdapEntry.create(baseDN, result);
+        LdapEntry entry = LdapEntry.create(result);
 
         ConnectorObjectBuilder builder = new ConnectorObjectBuilder();
         builder.setObjectClass(oclass);

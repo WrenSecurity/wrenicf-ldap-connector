@@ -93,10 +93,12 @@ public class TimestampsSyncStrategy implements LdapSyncStrategy {
         this.server = conn.getServerType();
     }
 
+    @Override
     public SyncToken getLatestSyncToken() {
         return new SyncToken(getNowTime());
     }
 
+    @Override
     public void sync(SyncToken token, final SyncResultsHandler handler, final OperationOptions options) {
         // ldapsearch -h host -p 389 -b "dc=example,dc=com" -D "cn=administrator,cn=users,dc=example,dc=com" -w xxx "whenchanged>=20130214130642.0Z"
         // on AD
@@ -135,8 +137,9 @@ public class TimestampsSyncStrategy implements LdapSyncStrategy {
 
         try {
             search.execute(new LdapSearchResultsHandler() {
+                @Override
                 public boolean handle(String baseDN, SearchResult result) throws NamingException {
-                    LdapEntry entry = LdapEntry.create(baseDN, result);
+                    LdapEntry entry = LdapEntry.create(result);
                     Attributes attrs = result.getAttributes();
                     Uid uid = conn.getSchemaMapping().createUid(oclass, entry);
                     // build the object first
