@@ -83,26 +83,26 @@ public class ADLdapUtil {
 
         StringBuilder sGUID = new StringBuilder(43);
         sGUID.append("<GUID=");
-        sGUID.append(AddLeadingZero((int)GUID[3] & 0xFF));
-        sGUID.append(AddLeadingZero((int)GUID[2] & 0xFF));
-        sGUID.append(AddLeadingZero((int)GUID[1] & 0xFF));
-        sGUID.append(AddLeadingZero((int)GUID[0] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[3] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[2] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[1] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[0] & 0xFF));
         sGUID.append("-");
-        sGUID.append(AddLeadingZero((int)GUID[5] & 0xFF));
-        sGUID.append(AddLeadingZero((int)GUID[4] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[5] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[4] & 0xFF));
         sGUID.append("-");
-        sGUID.append(AddLeadingZero((int)GUID[7] & 0xFF));
-        sGUID.append(AddLeadingZero((int)GUID[6] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[7] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[6] & 0xFF));
         sGUID.append("-");
-        sGUID.append(AddLeadingZero((int)GUID[8] & 0xFF));
-        sGUID.append(AddLeadingZero((int)GUID[9] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[8] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[9] & 0xFF));
         sGUID.append("-");
-        sGUID.append(AddLeadingZero((int)GUID[10] & 0xFF));
-        sGUID.append(AddLeadingZero((int)GUID[11] & 0xFF));
-        sGUID.append(AddLeadingZero((int)GUID[12] & 0xFF));
-        sGUID.append(AddLeadingZero((int)GUID[13] & 0xFF));
-        sGUID.append(AddLeadingZero((int)GUID[14] & 0xFF));
-        sGUID.append(AddLeadingZero((int)GUID[15] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[10] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[11] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[12] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[13] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[14] & 0xFF));
+        sGUID.append(AddLeadingZero(GUID[15] & 0xFF));
         sGUID.append(">");
 
         return sGUID.toString();
@@ -123,7 +123,7 @@ public class ADLdapUtil {
         StringBuilder sGUID = new StringBuilder(39);
         sGUID.append("<GUID=");
         for(int i=0;i<16;i++){
-            sGUID.append(AddLeadingZero((int)GUID[i] & 0xFF));
+            sGUID.append(AddLeadingZero(GUID[i] & 0xFF));
         }
         sGUID.append(">");
         return sGUID.toString();
@@ -215,7 +215,7 @@ public class ADLdapUtil {
         // bytes[2..7] : the Authority
         StringBuilder tmpBuff = new StringBuilder();
         for (int t = 2; t <= 7; t++) {
-            tmpBuff.append(AddLeadingZero((int) SID[t] & 0xFF));
+            tmpBuff.append(AddLeadingZero(SID[t] & 0xFF));
         }
         strSID.append(Long.parseLong(tmpBuff.toString(), 16));
 
@@ -256,7 +256,7 @@ public class ADLdapUtil {
     }
 
     public static List<Object> fetchGroupMembersByRange(LdapConnection conn, SearchResult result){
-        return fetchGroupMembersByRange(conn, LdapEntry.create(null, result));
+        return fetchGroupMembersByRange(conn, LdapEntry.create(result));
     }
 
     /*
@@ -284,10 +284,10 @@ public class ADLdapUtil {
                     NamingEnumeration<SearchResult> entries = context.search(entry.getDN(), "objectclass=*", controls);
                     SearchResult res = entries.next();
                     if (res != null) {
-                        range = conn.getSchemaMapping().createAttribute(ObjectClass.GROUP, String.format("member;range=%d-%d", first, last), LdapEntry.create(null,res), true);
+                        range = conn.getSchemaMapping().createAttribute(ObjectClass.GROUP, String.format("member;range=%d-%d", first, last), LdapEntry.create(res), true);
                         // we hit the last slice... so the range ends with an '*'
                         if (range.getValue().isEmpty()) {
-                            range = conn.getSchemaMapping().createAttribute(ObjectClass.GROUP, String.format("member;range=%d-*", first), LdapEntry.create(null,res), true);
+                            range = conn.getSchemaMapping().createAttribute(ObjectClass.GROUP, String.format("member;range=%d-*", first), LdapEntry.create(res), true);
                             done = true;
                         }
                         members.addAll(range.getValue());

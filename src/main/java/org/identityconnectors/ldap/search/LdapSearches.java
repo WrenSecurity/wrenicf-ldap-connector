@@ -136,6 +136,7 @@ public class LdapSearches {
 
         LdapSearch search = new LdapSearch(conn, oclass, ldapFilter, null, builder.build(), baseDN);
         search.execute(new ResultsHandler() {
+            @Override
             public boolean handle(ConnectorObject object) {
                 result.add(object);
                 return true;
@@ -167,8 +168,9 @@ public class LdapSearches {
         controls.setReturningAttributes(ldapAttrsToGet);
         LdapInternalSearch search = new LdapInternalSearch(conn, null, singletonList(entryDN.toString()), new DefaultSearchStrategy(true), controls);
         search.execute(new LdapSearchResultsHandler() {
+            @Override
             public boolean handle(String baseDN, SearchResult searchResult) {
-                result.add(LdapEntry.create(baseDN, searchResult));
+                result.add(LdapEntry.create(searchResult));
                 return false;
             }
         });

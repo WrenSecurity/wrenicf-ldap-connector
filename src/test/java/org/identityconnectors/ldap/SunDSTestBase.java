@@ -68,8 +68,9 @@ public class SunDSTestBase {
                 new DefaultSearchStrategy(false), controls);
         final List<LdapName> entryDNs = new ArrayList<LdapName>();
         search.execute(new LdapSearchResultsHandler() {
+            @Override
             public boolean handle(String baseDN, SearchResult result) throws NamingException {
-                entryDNs.add(LdapEntry.create(baseDN, result).getDN());
+                entryDNs.add(LdapEntry.create(result).getDN());
                 return true;
             }
         });

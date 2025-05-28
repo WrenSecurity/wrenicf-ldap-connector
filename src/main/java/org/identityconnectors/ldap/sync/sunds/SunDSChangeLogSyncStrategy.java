@@ -126,10 +126,12 @@ public class SunDSChangeLogSyncStrategy implements LdapSyncStrategy {
         this.oclass = oclass;
     }
 
+    @Override
     public SyncToken getLatestSyncToken() {
         return new SyncToken(getChangeLogAttributes().getLastChangeNumber());
     }
 
+    @Override
     public void sync(SyncToken token, final SyncResultsHandler handler, final OperationOptions options) {
         String context = getChangeLogAttributes().getChangeLogContext();
         final String changeNumberAttr = getChangeNumberAttribute();
@@ -148,9 +150,10 @@ public class SunDSChangeLogSyncStrategy implements LdapSyncStrategy {
             LdapInternalSearch search = new LdapInternalSearch(conn, filter, singletonList(context), new DefaultSearchStrategy(false), controls);
 
             search.execute(new LdapSearchResultsHandler() {
+                @Override
                 public boolean handle(String baseDN, SearchResult result) throws NamingException {
                     results[0] = true;
-                    LdapEntry entry = LdapEntry.create(baseDN, result);
+                    LdapEntry entry = LdapEntry.create(result);
 
                     int changeNumber = convertToInt(getStringAttrValue(entry.getAttributes(), changeNumberAttr), -1);
                     if (changeNumber > currentChangeNumber[0]) {
@@ -450,7 +453,7 @@ public class SunDSChangeLogSyncStrategy implements LdapSyncStrategy {
                 String resetPolicy = conn.getConfiguration().getResetSyncToken();
                 // The current SyncToken should never be greater than the lastChangeNumber in the changelog
                 // We use the value defined by resetSyncToken to act
-                log.info("The current SyncToken value ({0}) is greater than the lastChangeNumber value ({1})", (Integer) lastToken.getValue(), getChangeLogAttributes().getLastChangeNumber());
+                log.info("The current SyncToken value ({0}) is greater than the lastChangeNumber value ({1})", lastToken.getValue(), getChangeLogAttributes().getLastChangeNumber());
                 if (RESET_SYNC_TOKEN_NEVER.equalsIgnoreCase(resetPolicy)){
                     // do nothing
                     lastTokenValue++;
@@ -661,8 +664,10 @@ public class SunDSChangeLogSyncStrategy implements LdapSyncStrategy {
     private PasswordDecryptor getPasswordDecryptor() {
         if (passwordDecryptor == null) {
             conn.getConfiguration().getPasswordDecryptionKey().access(new Accessor() {
+                @Override
                 public void access(final byte[] decryptionKey) {
                     conn.getConfiguration().getPasswordDecryptionInitializationVector().access(new Accessor() {
+                        @Override
                         public void access(byte[] decryptionIV) {
                             passwordDecryptor = new PasswordDecryptor(decryptionKey, decryptionIV);
                         }

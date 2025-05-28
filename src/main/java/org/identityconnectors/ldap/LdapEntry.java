@@ -19,6 +19,8 @@
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * ====================
+ *
+ * Portions Copyright 2025 Wren Security.
  */
 package org.identityconnectors.ldap;
 
@@ -52,8 +54,8 @@ public abstract class LdapEntry {
         ENTRY_DN_ATTRS = unmodifiableSet(set);
     }
 
-    public static LdapEntry create(String baseDN, SearchResult result) {
-        return new SearchResultBased(baseDN, result);
+    public static LdapEntry create(SearchResult result) {
+        return new SearchResultBased(result);
     }
 
     public static LdapEntry create(String entryDN, Attributes attributes) {
@@ -100,16 +102,14 @@ public abstract class LdapEntry {
 
     private static final class SearchResultBased extends LdapEntry {
 
-        private final String baseDN;
         private final SearchResult result;
 
         private Attributes attributes;
         private LdapName dn;
 
-        public SearchResultBased(String baseDN, SearchResult result) {
+        public SearchResultBased(SearchResult result) {
             assert result != null;
 
-            this.baseDN = baseDN;
             this.result = result;
         }
 
@@ -124,32 +124,11 @@ public abstract class LdapEntry {
         @Override
         public LdapName getDN() {
             if (dn == null) {
-                if (result.isRelative()) {
-                    try {
-                        //dn = join(result.getName(), baseDN);
-                        dn = new LdapName(result.getNameInNamespace());
-                    } catch (InvalidNameException ex) {
-                         throw new ConnectorException(ex);
-                    }
-                } else {
-                    // Striping the scheme and host, according to a comment in the adapter.
-                    dn = join(getDNFromLdapUrl(result.getName()), null);
-                }
+                dn = quietCreateLdapName(result.getNameInNamespace());
             }
             return dn;
         }
 
-        private String getDNFromLdapUrl(String url) {
-            int schemeEndPos = url.indexOf("://");
-            if (schemeEndPos < 0) {
-                return null;
-            }
-            int slashAfterHostPos = url.indexOf('/', schemeEndPos + 3);
-            if (slashAfterHostPos < 0) {
-                return null;
-            }
-            return url.substring(slashAfterHostPos + 1);
-        }
     }
 
     private static final class Simple extends LdapEntry {
