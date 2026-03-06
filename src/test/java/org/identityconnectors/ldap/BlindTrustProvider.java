@@ -57,7 +57,7 @@ public class BlindTrustProvider extends Provider {
     }
 
     public BlindTrustProvider() {
-        super(ID, 1.0, ID);
+        super(ID, "1.0", ID);
         put("TrustManagerFactory." + ALGORITHM, BlindTrustManagerFactory.class.getName());
     }
 
@@ -79,12 +79,15 @@ public class BlindTrustProvider extends Provider {
 
     public static final class BlindTrustManager implements X509TrustManager {
 
+        @Override
         public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
         }
 
+        @Override
         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
         }
 
+        @Override
         public X509Certificate[] getAcceptedIssuers() {
             return null;
         }

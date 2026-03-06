@@ -7,20 +7,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [11, 17]
+        java: [17, 21, 25]
     name: "Java ${{ matrix.java }} build"
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK
-        uses: actions/setup-java@v3
+      - name: Checkout project
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Set up Java
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
-          java-version: ${{ matrix.java }}
-          distribution: 'temurin'
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Run the Maven verify phase
-        run: mvn -B verify --file pom.xml
+          distribution: "temurin"
+          java-version: "${{ matrix.java }}"
+          cache: "maven"
+      - name: Verify build
+        run: mvn -B verify

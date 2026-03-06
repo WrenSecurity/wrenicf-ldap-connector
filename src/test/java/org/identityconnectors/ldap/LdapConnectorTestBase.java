@@ -19,19 +19,19 @@
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * ====================
+ *
+ * Portions Copyright 2026 Wren Security.
  */
 package org.identityconnectors.ldap;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.Assert;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.List;
-
+import org.forgerock.opendj.server.embedded.ConfigParameters;
+import org.forgerock.opendj.server.embedded.EmbeddedDirectoryServer;
+import org.forgerock.opendj.server.embedded.EmbeddedDirectoryServerException;
 import org.identityconnectors.common.IOUtil;
 import org.identityconnectors.common.security.GuardedString;
 import org.identityconnectors.framework.api.APIConfiguration;
@@ -45,12 +45,14 @@ import org.identityconnectors.framework.common.objects.OperationOptions;
 import org.identityconnectors.framework.common.objects.OperationOptionsBuilder;
 import org.identityconnectors.framework.common.objects.filter.FilterBuilder;
 import org.identityconnectors.test.common.TestHelpers;
-import org.opends.server.config.ConfigException;
-import org.opends.server.types.DirectoryEnvironmentConfig;
-import org.opends.server.types.InitializationException;
-import org.opends.server.util.EmbeddedUtils;
+import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
 public abstract class LdapConnectorTestBase {
+
+    private static EmbeddedDirectoryServer embeddedServer;
 
     // Cf. data.ldif and bigcompany.ldif.
 
@@ -132,14 +134,14 @@ public abstract class LdapConnectorTestBase {
 
     @AfterClass
     public static void afterClass() {
-        if (EmbeddedUtils.isRunning()) {
+        if (embeddedServer != null && embeddedServer.isRunning()) {
             stopServer();
         }
     }
 
     @BeforeMethod
     public void before() throws Exception {
-        if (!EmbeddedUtils.isRunning()) {
+        if (embeddedServer == null || !embeddedServer.isRunning()) {
             startServer();
         }
     }
@@ -225,22 +227,21 @@ public abstract class LdapConnectorTestBase {
 
         File configDir = new File(root, "config");
         File configFile = new File(configDir, "config.ldif");
-        File schemaDir = new File(configDir, "schema");
 
         try {
-            DirectoryEnvironmentConfig config = new DirectoryEnvironmentConfig();
-            config.setServerRoot(root);
-            config.setConfigFile(configFile);
-            config.setSchemaDirectory(schemaDir);
-            EmbeddedUtils.startServer(config);
-        } catch (InitializationException e) {
-            throw (IOException) new IOException(e.getMessage()).initCause(e);
+            ConfigParameters configParams = ConfigParameters.configParams()
+                    .serverRootDirectory(root.getAbsolutePath())
+                    .configurationFile(configFile.getAbsolutePath());
+            embeddedServer = EmbeddedDirectoryServer.manageEmbeddedDirectoryServerForRestrictedOps(configParams);
+            embeddedServer.start();
+        } catch (EmbeddedDirectoryServerException e) {
+            throw new IOException(e.getMessage(), e);
         }
     }
 
     protected static void stopServer() {
-        EmbeddedUtils.stopServer("org.test.opends.EmbeddedOpenDS", null);
-        // It seems that EmbeddedUtils.stopServer() returns before the server has stopped listening on its port,
+        embeddedServer.stop("org.test.opends.EmbeddedOpenDS", null);
+        // It seems that stop() returns before the server has stopped listening on its port,
         // causing the next test to fail when starting the server.
         final int WAIT = 200; // ms
         final int ITERATIONS = 25;
