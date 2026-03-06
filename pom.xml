@@ -13,7 +13,7 @@
     information: "Portions copyright [year] [name of copyright owner]".
 
     Copyright (c) 2011-2015 ForgeRock AS. All rights reserved.
-    Portions Copyright 2022-2025 Wren Security.
+    Portions Copyright 2022-2026 Wren Security.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -21,9 +21,10 @@
     <parent>
         <groupId>org.wrensecurity.wrenicf.connector</groupId>
         <artifactId>connector-bundle-parent</artifactId>
-        <version>1.5.3.1</version>
+        <version>1.5.3.2</version>
     </parent>
 
+    <groupId>org.wrensecurity.wrenicf.connector</groupId>
     <artifactId>ldap-connector</artifactId>
     <version>1.5.3.2-SNAPSHOT</version>
     <packaging>bundle</packaging>
@@ -54,7 +55,6 @@
         </repository>
     </distributionManagement>
 
-    <!-- (see FAQ at http://maven.apache.org/guides/mini/guide-central-repository-upload.html ) -->
     <repositories>
         <repository>
             <id>wrensecurity-releases</id>
@@ -92,10 +92,13 @@
     </issueManagement>
 
     <properties>
+        <pgpVerifyKeysVersion>1.9.14</pgpVerifyKeysVersion>
+        <maven.compiler.release>17</maven.compiler.release>
+
         <connectorPackage>org.identityconnectors.ldap</connectorPackage>
         <connectorClass>LdapConnector</connectorClass>
         <framework.compatibilityVersion>1.5</framework.compatibilityVersion>
-        <framework.releaseVersion>3.1</framework.releaseVersion>
+        <framework.releaseVersion>3.2</framework.releaseVersion>
         <!-- Specify default port to allow executing of test cases in IDE -->
         <opendj.port>44444</opendj.port>
 
@@ -109,10 +112,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.opendj</groupId>
-            <artifactId>opendj-ldap-sdk</artifactId>
-            <version>2.6.10</version>
-            <type>jar</type>
+            <groupId>org.wrensecurity.wrends</groupId>
+            <artifactId>opendj-core</artifactId>
+            <version>5.0.4</version>
         </dependency>
 
         <!-- Test Dependencies -->
@@ -138,14 +140,14 @@
         <dependency>
             <groupId>org.wrensecurity.wrends</groupId>
             <artifactId>opendj-server-legacy</artifactId>
-            <version>5.0.1</version>
+            <version>5.0.4</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core </artifactId>
-            <version>5.16.0</version>
+            <version>5.22.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -179,7 +181,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.6.1</version>
 
                 <executions>
                     <execution>

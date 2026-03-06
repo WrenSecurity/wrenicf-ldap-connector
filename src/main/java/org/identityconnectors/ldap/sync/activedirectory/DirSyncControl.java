@@ -33,8 +33,8 @@ import java.io.IOException;
 
 import javax.naming.ldap.BasicControl;
 
-import org.forgerock.opendj.asn1.ASN1;
-import org.forgerock.opendj.asn1.ASN1Writer;
+import org.forgerock.opendj.io.ASN1;
+import org.forgerock.opendj.io.ASN1Writer;
 
 public class DirSyncControl extends BasicControl {
 
