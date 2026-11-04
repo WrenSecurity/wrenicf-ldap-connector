@@ -21,7 +21,7 @@
  * ====================
  *
  * Portions Copyrighted 2013-2016 ForgeRock AS
- * Portions Copyright 2022 Wren Security.
+ * Portions Copyright 2022-2026 Wren Security.
  */
 package org.identityconnectors.ldap;
 
@@ -225,16 +225,26 @@ public class LdapConnection {
         return result.get(0);
     }
 
-    private Pair<AuthenticationResult, LdapContext> createContext(Hashtable<?, ?> env, boolean useTLS) {
+    private Pair<AuthenticationResult, LdapContext> createContext(Hashtable<Object, Object> env, boolean useTLS) {
         AuthenticationResult authnResult = null;
         InitialLdapContext context = null;
         try {
-            context = new InitialLdapContext(env, null);
             if (useTLS) {
+                Object principal = env.remove(Context.SECURITY_PRINCIPAL);
+                Object credentials = env.remove(Context.SECURITY_CREDENTIALS);
+                context = new InitialLdapContext(env, null);
                 startTlsResponse = (StartTlsResponse)context.extendedOperation(new StartTlsRequest());
                 startTlsResponse.negotiate();
                 context.addToEnvironment(Context.SECURITY_AUTHENTICATION, "simple");
+                if (principal != null) {
+                    context.addToEnvironment(Context.SECURITY_PRINCIPAL, principal);
+                }
+                if (credentials != null) {
+                    context.addToEnvironment(Context.SECURITY_CREDENTIALS, credentials);
+                }
                 context.reconnect(null);
+            } else {
+                context = new InitialLdapContext(env, null);
             }
             if (config.isRespectResourcePasswordPolicyChangeAfterReset()) {
                 if (hasPasswordExpiredControl(context.getResponseControls())) {
